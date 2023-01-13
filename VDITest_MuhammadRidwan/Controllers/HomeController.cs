@@ -93,6 +93,7 @@ namespace VDITest_MuhammadRidwan.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult ExportToPdf(MemberModel model)
         {
@@ -105,7 +106,7 @@ namespace VDITest_MuhammadRidwan.Controllers
 
             }
             model.AvatarUrl = model.AvatarUrl.Substring(1);
-            string serverUrl = Path.Combine(_webHostEnvironment.WebRootPath, model.AvatarUrl); //"avatar/0effac8e-7bb7-4727-a77d-165bb7eecf38bocilkematian.PNG" 
+            string serverUrl = Path.Combine(_webHostEnvironment.WebRootPath, model.AvatarUrl);
             model.AvatarUrl = serverUrl;
             var html = this.RenderViewAsync("Details", model);
             var ironPdfRender = new IronPdf.ChromePdfRenderer();
