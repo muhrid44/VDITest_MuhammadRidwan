@@ -1,22 +1,8 @@
 ﻿using IronPdf;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.tool.xml;
-using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Mvc;
-using Syncfusion.Pdf.Graphics;
-using Syncfusion.Pdf;
 using System.Diagnostics;
-using System.Drawing.Printing;
-using System.Text;
 using VDITest_MuhammadRidwan._2._Services.IService;
 using VDITest_MuhammadRidwan.Models;
-using PdfDocument = Syncfusion.Pdf.PdfDocument;
-using PdfPage = Syncfusion.Pdf.PdfPage;
-using PdfFont = Syncfusion.Pdf.Graphics.PdfFont;
-using System.Drawing;
-using Microsoft.AspNetCore.Hosting;
-using SixLabors.ImageSharp.Drawing;
 using Path = System.IO.Path;
 
 namespace VDITest_MuhammadRidwan.Controllers
@@ -97,8 +83,8 @@ namespace VDITest_MuhammadRidwan.Controllers
         [HttpPost]
         public ActionResult ExportToPdf(MemberModel model)
         {
-            IronPdf.Installation.TempFolderPath = @"{_host.ContentRootPath}/irontemp/";
-            IronPdf.Installation.LinuxAndDockerDependenciesAutoConfig = true;
+            Installation.TempFolderPath = @"{_host.ContentRootPath}/irontemp/";
+            Installation.LinuxAndDockerDependenciesAutoConfig = true;
             var charsToRemove = new string[] { @"\" };
             foreach (var c in charsToRemove)
             {
@@ -108,7 +94,7 @@ namespace VDITest_MuhammadRidwan.Controllers
             model.AvatarUrl = model.AvatarUrl.Substring(1);
             string serverUrl = Path.Combine(_webHostEnvironment.WebRootPath, model.AvatarUrl);
             model.AvatarUrl = serverUrl;
-            var html = this.RenderViewAsync("Details", model);
+            var html = this.RenderViewAsync("Details", model, true);
             var ironPdfRender = new IronPdf.ChromePdfRenderer();
             using var pdfDoc = ironPdfRender.RenderHtmlAsPdf(html.Result);
             return File(pdfDoc.Stream.ToArray(), "application/pdf");
