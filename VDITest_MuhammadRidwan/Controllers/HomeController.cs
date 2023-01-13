@@ -93,25 +93,6 @@ namespace VDITest_MuhammadRidwan.Controllers
         {
             return View();
         }
-
-        [HttpPost]
-        public FileResult ExportExcel(string ExportData)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                StringReader reader = new StringReader(ExportData);
-                Document PdfFile = new Document(PageSize.A4);
-                PdfWriter writer = PdfWriter.GetInstance(PdfFile, stream);
-
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-                PdfFile.Open();
-                XMLWorkerHelper.GetInstance().ParseXHtml(writer, PdfFile, reader);
-                PdfFile.Close();
-                return File(stream.ToArray(), "application/pdf", "ExportData.pdf");
-            }
-        }
-
         [HttpPost]
         public ActionResult ExportToPdf(MemberModel model)
         {
