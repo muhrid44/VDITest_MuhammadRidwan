@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using VDITest_MuhammadRidwan._1._Data.IRepository;
@@ -13,7 +14,7 @@ namespace VDITest_MuhammadRidwan._1._Data.Repository
         {
             using (var db = new NpgsqlConnection(HelperClass.connectionString))
             {
-                var query = await db.QueryAsync<MemberModel>(@"SELECT * FROM ""member""");
+                var query = await db.QueryAsync<MemberModel>(@"SELECT * FROM ""member"" ORDER BY ""id""");
                 return query.ToList();
             }
         }
@@ -31,14 +32,15 @@ namespace VDITest_MuhammadRidwan._1._Data.Repository
             {
                 await db.ExecuteAsync(
                     @"INSERT INTO ""member"" 
-                    (""name"", ""address"", ""phone"", ""birthplace"", ""birthdate"", ""nik"", ""avatarurl"") 
+                    (""name"", ""address"", ""phone"", ""birthplace"", ""birthdate"", ""nik"", ""avatarurl"", ""filename"") 
                     VALUES
-                    (@Name, @Address, @Phone, @BirthPlace, @BirthDate, @NIK, @AvatarUrl)
+                    (@Name, @Address, @Phone, @BirthPlace, @BirthDate, @NIK, @AvatarUrl, @FileName)
                     ", model);
             }
         }
         public async Task Update(MemberModel model)
         {
+
             using (var db = new NpgsqlConnection(HelperClass.connectionString))
             {
                 await db.ExecuteAsync(
@@ -49,7 +51,25 @@ namespace VDITest_MuhammadRidwan._1._Data.Repository
                     ""birthplace"" = @BirthPlace,
                     ""birthdate"" = @BirthDate,
                     ""nik"" = @NIK,
-                    ""avatarurl"" = @AvatarUrl
+                    ""avatarurl"" = @AvatarUrl,
+                    ""filename"" = @FileName
+                    WHERE ""id"" = @Id", model);
+            }
+        }
+
+        public async Task UpdateWithoutChangeAvatar(MemberModel model)
+        {
+
+            using (var db = new NpgsqlConnection(HelperClass.connectionString))
+            {
+                await db.ExecuteAsync(
+                     @"UPDATE ""member"" SET
+                    ""name"" = @Name,
+                    ""address"" = @Address,
+                    ""phone"" = @Phone,
+                    ""birthplace"" = @BirthPlace,
+                    ""birthdate"" = @BirthDate,
+                    ""nik"" = @NIK
                     WHERE ""id"" = @Id", model);
             }
         }

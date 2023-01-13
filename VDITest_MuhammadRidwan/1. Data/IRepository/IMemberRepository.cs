@@ -8,6 +8,7 @@ namespace VDITest_MuhammadRidwan._1._Data.IRepository
         Task<MemberModel> GetById(int id);
         Task Create(MemberModel model);
         Task Update(MemberModel model);
+        Task UpdateWithoutChangeAvatar(MemberModel model);
         Task DeleteById(int id);
     }
 }
